@@ -41,8 +41,16 @@ This is a monorepo using pnpm workspaces with the following structure:
 - UI components follow a consistent pattern with TypeScript interfaces extending HTML attributes
 - Components use React.forwardRef for proper ref forwarding
 
+### Styling System
+- **Color System**: Uses OKLCH color space for shadcn/ui variables defined in `app.css` using Tailwind v4's `@theme` directive
+- **Custom Properties**: All colors are defined as CSS custom properties with OKLCH values for better perceptual uniformity
+- **Dark Mode**: Automatic dark mode support using CSS nesting syntax `&:is(.dark *)`
+- **Semantic Colors**: Includes background, foreground, primary, secondary, muted, accent, destructive, border, input, ring colors
+- **Chart Colors**: Predefined chart color palette (chart-1 through chart-5)
+
 ### Configuration
 - `react-router.config.ts` - React Router configuration (SPA mode enabled)
 - `vite.config.ts` - Vite build configuration with Tailwind CSS and TypeScript path support
 - `.storybook/` - Storybook configuration for component documentation
 - `pnpm-workspace.yaml` - Workspace configuration with build optimization settings
+- `app.css` - Global styles with Tailwind imports and OKLCH color definitions
