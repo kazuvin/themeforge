@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { Header } from '../header'
+import type { Meta, StoryObj } from '@storybook/react';
+import { Header } from '../header';
 
 const meta: Meta<typeof Header> = {
   title: 'Layout/Header',
@@ -21,20 +21,20 @@ const meta: Meta<typeof Header> = {
       control: 'text',
     },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
-}
+};
 
 export const WithMobileMenuOpen: Story = {
   args: {
     showMobileMenu: true,
   },
-}
+};
 
 export const CustomBranding: Story = {
   args: {
@@ -47,4 +47,4 @@ export const CustomBranding: Story = {
       { label: 'About', href: '#' },
     ],
   },
-}
+};

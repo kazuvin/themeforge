@@ -40,6 +40,7 @@ This is a monorepo using pnpm workspaces with the following structure:
 - The `cn()` utility (clsx + tailwind-merge) is used for conditional className composition
 - UI components follow a consistent pattern with TypeScript interfaces extending HTML attributes
 - Components use React.forwardRef for proper ref forwarding
+- **Component Definition**: Use function declarations instead of React.FC. Prefer `export function ComponentName() {}` over `export const ComponentName: React.FC = () => {}`
 
 ### Styling System
 - **Color System**: Uses OKLCH color space for shadcn/ui variables defined in `app.css` using Tailwind v4's `@theme` directive

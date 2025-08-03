@@ -7,10 +7,13 @@
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.14",
     "@react-router/node": "^7.7.1",
     "@react-router/serve": "^7.7.1",
     "class-variance-authority": "^0.7.1",

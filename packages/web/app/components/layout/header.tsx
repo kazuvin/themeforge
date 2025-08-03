@@ -1,6 +1,7 @@
 import React from 'react';
 import { SITE_TITLE } from '~/config';
 import { cn } from '~/utils/cn';
+import { Button } from '../ui';
 
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   companyName?: string;
@@ -34,7 +35,7 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
         <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
           <div className="flex lg:flex-1">
             <a href="#">
-              <span className="text-sm/6 font-semibold">{companyName}</span>
+              <span className="text-lg font-semibold">{companyName}</span>
             </a>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
@@ -45,9 +46,7 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm/6 font-semibold text-gray-900">
-              Log in <span aria-hidden="true">&rarr;</span>
-            </a>
+            <Button size="sm">ログイン</Button>
           </div>
         </nav>
 
@@ -87,12 +86,7 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
                       ))}
                     </div>
                     <div className="py-6">
-                      <a
-                        href="#"
-                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                      >
-                        Log in
-                      </a>
+                      <Button>Log in</Button>
                     </div>
                   </div>
                 </div>
