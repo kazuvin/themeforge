@@ -12,7 +12,7 @@
   --color-card-foreground: oklch(10% 0.002 285);
   --color-popover: oklch(100% 0 0);
   --color-popover-foreground: oklch(10% 0.002 285);
-  --color-primary: oklch(62.8% 0.224 264);
+  --color-primary: oklch(55% 0.224 264);
   --color-primary-foreground: oklch(98% 0.013 264);
   --color-secondary: oklch(96.1% 0.014 264);
   --color-secondary-foreground: oklch(10% 0.002 285);
@@ -20,11 +20,11 @@
   --color-muted-foreground: oklch(65.4% 0.014 264);
   --color-accent: oklch(96.1% 0.014 264);
   --color-accent-foreground: oklch(10% 0.002 285);
-  --color-destructive: oklch(69.7% 0.206 27);
+  --color-destructive: oklch(55% 0.206 27);
   --color-destructive-foreground: oklch(98% 0.013 264);
   --color-border: oklch(91.4% 0.011 264);
   --color-input: oklch(91.4% 0.011 264);
-  --color-ring: oklch(62.8% 0.224 264);
+  --color-ring: oklch(71.4% 0.011 264);
   --color-chart-1: oklch(67.5% 0.15 34);
   --color-chart-2: oklch(55.7% 0.097 194);
   --color-chart-3: oklch(36.2% 0.033 258);
@@ -34,7 +34,7 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-background text-foreground dark:bg-gray-950;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;

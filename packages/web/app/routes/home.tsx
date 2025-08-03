@@ -8,7 +8,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Home() {
   return (
-    <div className="">
+    <div>
       <h1 className="text-3xl font-bold">Welcome</h1>
       <Button variant="outline" size="sm">
         hoge
