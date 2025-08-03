@@ -1,3 +1,4 @@
+import { Button } from '~/components/ui/button';
 import type { Route } from './+types/home';
 import { SITE_TITLE } from '~/config';
 
@@ -9,7 +10,9 @@ export default function Home() {
   return (
     <div className="">
       <h1 className="text-3xl font-bold">Welcome</h1>
-      <p>hoge</p>
+      <Button variant="outline" size="sm">
+        hoge
+      </Button>
     </div>
   );
 }
