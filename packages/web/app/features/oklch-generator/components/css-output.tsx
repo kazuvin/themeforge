@@ -54,7 +54,7 @@ export function CssOutput({ cssOutput, onCopy, className }: CssOutputProps) {
             Add colors to see CSS output
           </div>
         ) : (
-          <pre className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-sm whitespace-pre-wrap">
+          <pre className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-xs whitespace-pre-wrap">
             {cssOutput}
           </pre>
         )}
