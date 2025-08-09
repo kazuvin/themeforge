@@ -1,63 +1,114 @@
 import * as React from 'react';
-import { Button } from '~/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
-import { cn } from '~/utils';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '~/components/ui/tabs';
+import { Code } from '~/components/ui/code';
+import { toast } from 'sonner';
+import type { OklchColor } from '../types';
+
+type OutputFormat = 'css-variables' | 'tailwind-v3' | 'tailwind-v4';
 
 type CssOutputProps = {
-  cssOutput: string;
-  onCopy: () => Promise<boolean>;
+  colors: OklchColor[];
   className?: string;
 };
 
-export function CssOutput({ cssOutput, onCopy, className }: CssOutputProps) {
-  const [copyStatus, setCopyStatus] = React.useState<'idle' | 'copied' | 'error'>('idle');
+export function CssOutput({ colors, className }: CssOutputProps) {
+  const [activeTab, setActiveTab] = React.useState<OutputFormat>('css-variables');
 
-  const handleCopy = async () => {
-    const success = await onCopy();
-    setCopyStatus(success ? 'copied' : 'error');
-    setTimeout(() => setCopyStatus('idle'), 2000);
+  const generateCssVariables = (colors: OklchColor[]) => {
+    if (colors.length === 0) return '';
+
+    const cssVars = colors
+      .map(
+        (color) => `  --${color.name.replace(/\s+/g, '-')}: oklch(${color.lightness}% ${color.chroma} ${color.hue});`,
+      )
+      .join('\n');
+
+    return `:root {\n${cssVars}\n}`;
   };
 
-  const getCopyButtonText = () => {
-    switch (copyStatus) {
-      case 'copied':
-        return 'Copied!';
-      case 'error':
-        return 'Error';
+  const generateTailwindV3 = (colors: OklchColor[]) => {
+    if (colors.length === 0) return '';
+
+    const colorEntries = colors
+      .map(
+        (color) =>
+          `        '${color.name.replace(/\s+/g, '-')}': 'oklch(${color.lightness}% ${color.chroma} ${color.hue})'`,
+      )
+      .join(',\n');
+
+    return `module.exports = {
+  theme: {
+    extend: {
+      colors: {
+${colorEntries}
+      }
+    }
+  }
+}`;
+  };
+
+  const generateTailwindV4 = (colors: OklchColor[]) => {
+    if (colors.length === 0) return '';
+
+    const cssVars = colors
+      .map(
+        (color) =>
+          `  --color-${color.name.replace(/\s+/g, '-')}: oklch(${color.lightness}% ${color.chroma} ${color.hue});`,
+      )
+      .join('\n');
+
+    return `@theme {\n${cssVars}\n}`;
+  };
+
+  const getOutputByFormat = (format: OutputFormat) => {
+    switch (format) {
+      case 'css-variables':
+        return generateCssVariables(colors);
+      case 'tailwind-v3':
+        return generateTailwindV3(colors);
+      case 'tailwind-v4':
+        return generateTailwindV4(colors);
       default:
-        return 'Copy to Clipboard';
+        return '';
     }
   };
 
-  const isEmpty = !cssOutput.trim() || cssOutput === '@theme {\n\n}';
+  const handleCopy = React.useCallback(() => {
+    toast('CSS copied to clipboard!');
+  }, [toast]);
 
   return (
     <Card className={className}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0">
+      <CardHeader>
         <CardTitle>CSS Output</CardTitle>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleCopy}
-          disabled={isEmpty || copyStatus === 'copied'}
-          className={cn(
-            copyStatus === 'copied' && 'border-green-200 bg-green-50 text-green-700',
-            copyStatus === 'error' && 'border-red-200 bg-red-50 text-red-700',
-          )}
-        >
-          {getCopyButtonText()}
-        </Button>
       </CardHeader>
       <CardContent>
-        {isEmpty ? (
-          <div className="text-muted-foreground flex items-center justify-center py-8">
-            Add colors to see CSS output
-          </div>
-        ) : (
-          <pre className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-xs whitespace-pre-wrap">
-            {cssOutput}
-          </pre>
-        )}
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as OutputFormat)}>
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="css-variables">CSS Variables</TabsTrigger>
+            <TabsTrigger value="tailwind-v3">Tailwind v3</TabsTrigger>
+            <TabsTrigger value="tailwind-v4">Tailwind v4</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="css-variables" className="mt-4">
+            <Code showCopy onCopy={handleCopy}>
+              {getOutputByFormat('css-variables')}
+            </Code>
+          </TabsContent>
+
+          <TabsContent value="tailwind-v3" className="mt-4">
+            <Code language="javascript" showCopy onCopy={handleCopy}>
+              {getOutputByFormat('tailwind-v3')}
+            </Code>
+          </TabsContent>
+
+          <TabsContent value="tailwind-v4" className="mt-4">
+            <Code showCopy onCopy={handleCopy}>
+              {getOutputByFormat('tailwind-v4')}
+            </Code>
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );

@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'prismjs/themes/prism.css';
 
 @theme {
   --font-sans:
@@ -62,4 +63,15 @@ body {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+}
+
+/* PrismJS syntax highlighting overrides */
+code[class*='language-'] .token.punctuation,
+code[class*='language-'] .token.operator,
+code[class*='language-'] .token.property,
+code[class*='language-'] .token.string,
+code[class*='language-'] .token.number,
+code[class*='language-'] .token.keyword,
+code[class*='language-'] .token {
+  background: transparent !important;
 }
