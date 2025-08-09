@@ -10,7 +10,7 @@ import {
 import { Input } from '~/components/ui/input';
 import { Copy } from 'lucide-react';
 import { toast } from 'sonner';
-import { getColorFormats } from '~/utils';
+import { getColorFormats, convertHexToOklch } from '~/utils';
 import type { OklchColor } from '../types';
 import { formatOklchValue } from '../utils';
 
@@ -33,6 +33,7 @@ type ColorItemProps = {
 function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
   const [isEditingName, setIsEditingName] = React.useState(false);
   const [editName, setEditName] = React.useState(color.name);
+  const colorInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleNameEdit = () => {
     if (isEditingName) {
@@ -69,13 +70,44 @@ function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
 
   const colorFormats = getColorFormats(color);
 
+  const handleColorClick = () => {
+    if (colorInputRef.current) {
+      colorInputRef.current.click();
+    }
+  };
+
+  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const hexColor = event.target.value;
+    const oklchColor = convertHexToOklch(hexColor);
+
+    if (oklchColor) {
+      onUpdate({
+        lightness: oklchColor.lightness,
+        chroma: oklchColor.chroma,
+        hue: oklchColor.hue,
+        alpha: oklchColor.alpha,
+      });
+    }
+  };
+
   return (
     <div className="border-border flex flex-col gap-3 rounded-lg border p-4">
       <div className="flex items-center gap-3">
-        <div
-          className="border-border h-16 w-16 flex-shrink-0 rounded-md border"
-          style={{ backgroundColor: colorValue }}
-        />
+        <div className="relative">
+          <div
+            className="border-border h-16 w-16 flex-shrink-0 cursor-pointer rounded-md border transition-opacity hover:opacity-80"
+            style={{ backgroundColor: colorValue }}
+            onClick={handleColorClick}
+            title="Click to change color"
+          />
+          <input
+            ref={colorInputRef}
+            type="color"
+            value={colorFormats.find((f) => f.label === 'HEX')?.value || '#000000'}
+            onChange={handleColorChange}
+            className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+          />
+        </div>
 
         <div className="min-w-0 flex-1">
           {isEditingName ? (
@@ -109,7 +141,7 @@ function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
                       <Copy className="h-3 w-3" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent align="start">
                     {colorFormats.map((format) => (
                       <DropdownMenuItem key={format.label} onSelect={() => handleCopyColor(format.label, format.value)}>
                         <div className="flex flex-col gap-1">
