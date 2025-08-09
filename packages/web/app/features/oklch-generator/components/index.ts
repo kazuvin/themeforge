@@ -1,4 +1,4 @@
-export { OklchColorList } from './oklch-color-list';
-export { OklchGenerator } from './oklch-generator';
-export { CssOutput } from './css-output';
-export { OklchImportDialog } from './oklch-import-dialog';
+export * from './oklch-color-list';
+export * from './oklch-generator';
+export * from './css-output';
+export * from './oklch-import-dialog';

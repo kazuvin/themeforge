@@ -14,12 +14,6 @@ const meta: Meta<typeof Header> = {
     companyName: {
       control: 'text',
     },
-    logoSrc: {
-      control: 'text',
-    },
-    logoAlt: {
-      control: 'text',
-    },
   },
 };
 
@@ -39,7 +33,6 @@ export const WithMobileMenuOpen: Story = {
 export const CustomBranding: Story = {
   args: {
     companyName: 'ThemeForge',
-    logoSrc: 'https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=purple&shade=600',
     navigationItems: [
       { label: 'Templates', href: '#' },
       { label: 'Components', href: '#' },

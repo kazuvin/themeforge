@@ -1,25 +1,34 @@
 import * as React from 'react';
 import { Button } from '~/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu';
 import { Input } from '~/components/ui/input';
+import { Copy } from 'lucide-react';
+import { toast } from 'sonner';
+import { getColorFormats } from '~/utils';
 import type { OklchColor } from '../types';
 import { formatOklchValue } from '../utils';
 
-interface OklchColorListProps {
+type OklchColorListProps = {
   colors: OklchColor[];
   onUpdate: (id: string, updates: Partial<Omit<OklchColor, 'id'>>) => void;
   onRemove: (id: string) => void;
   onDuplicate: (id: string) => void;
   onAdd: () => void;
   className?: string;
-}
+};
 
-interface ColorItemProps {
+type ColorItemProps = {
   color: OklchColor;
   onUpdate: (updates: Partial<Omit<OklchColor, 'id'>>) => void;
   onRemove: () => void;
   onDuplicate: () => void;
-}
+};
 
 function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
   const [isEditingName, setIsEditingName] = React.useState(false);
@@ -48,6 +57,18 @@ function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
 
   const colorValue = formatOklchValue(color);
 
+  const handleCopyColor = async (format: string, value: string) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      toast.success(`Copied ${format}: ${value}`);
+    } catch (err) {
+      console.error('Failed to copy color value:', err);
+      toast.error('Failed to copy color value');
+    }
+  };
+
+  const colorFormats = getColorFormats(color);
+
   return (
     <div className="border-border flex flex-col gap-3 rounded-lg border p-4">
       <div className="flex items-center gap-3">
@@ -75,7 +96,31 @@ function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
             />
           ) : (
             <div className="space-y-1">
-              <h4 className="truncate text-sm font-medium">{color.name}</h4>
+              <div className="flex items-center gap-2">
+                <h4 className="truncate text-sm font-medium">{color.name}</h4>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 w-6 p-0 opacity-60 hover:opacity-100"
+                      title="Copy color value"
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    {colorFormats.map((format) => (
+                      <DropdownMenuItem key={format.label} onSelect={() => handleCopyColor(format.label, format.value)}>
+                        <div className="flex flex-col gap-1">
+                          <span className="text-xs font-medium">{format.label}</span>
+                          <span className="text-muted-foreground font-mono text-xs">{format.value}</span>
+                        </div>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               <p className="text-muted-foreground font-mono text-xs">{colorValue}</p>
             </div>
           )}

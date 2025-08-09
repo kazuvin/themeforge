@@ -13,10 +13,10 @@ import { Textarea } from '~/components/ui/textarea';
 import type { OklchColor } from '../types';
 import { parseOklchFromCss } from '../utils';
 
-interface OklchImportDialogProps {
+type OklchImportDialogProps = {
   onImport: (colors: Omit<OklchColor, 'id'>[]) => void;
   children: React.ReactNode;
-}
+};
 
 export function OklchImportDialog({ onImport, children }: OklchImportDialogProps) {
   const [open, setOpen] = React.useState(false);
@@ -38,7 +38,7 @@ export function OklchImportDialog({ onImport, children }: OklchImportDialogProps
             'No OKLCH colors found in the provided CSS. Make sure your CSS contains --color-* properties with oklch() values.',
           );
         }
-      } catch (err) {
+      } catch {
         setError('Failed to parse CSS. Please check the format and try again.');
         setParsedColors([]);
       }
