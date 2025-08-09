@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Button } from '~/components/ui/button';
 import { cn } from '~/utils';
 import { useOklchGenerator } from '../hooks';
@@ -7,9 +6,9 @@ import { OklchColorList } from './oklch-color-list';
 import { CssOutput } from './css-output';
 import { OklchImportDialog } from './oklch-import-dialog';
 
-interface OklchGeneratorProps {
+type OklchGeneratorProps = {
   className?: string;
-}
+};
 
 export function OklchGenerator({ className }: OklchGeneratorProps) {
   const {

@@ -30,6 +30,29 @@
   --color-chart-3: oklch(36.2% 0.033 258);
   --color-chart-4: oklch(76.6% 0.122 91);
   --color-chart-5: oklch(73.9% 0.155 53);
+
+  /** Animation */
+  --animate-fade-out: 0.2s ease fade-out;
+  --animate-fade-in: 0.2s ease fade-in;
+
+  /** keyframes */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
 }
 
 html,

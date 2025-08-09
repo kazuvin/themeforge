@@ -3,11 +3,11 @@ import { Button } from '~/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
 import { cn } from '~/utils';
 
-interface CssOutputProps {
+type CssOutputProps = {
   cssOutput: string;
   onCopy: () => Promise<boolean>;
   className?: string;
-}
+};
 
 export function CssOutput({ cssOutput, onCopy, className }: CssOutputProps) {
   const [copyStatus, setCopyStatus] = React.useState<'idle' | 'copied' | 'error'>('idle');

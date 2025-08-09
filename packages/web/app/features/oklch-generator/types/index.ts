@@ -1,18 +1,18 @@
-export interface OklchColor {
+export type OklchColor = {
   id: string;
   name: string;
   lightness: number;
   chroma: number;
   hue: number;
   alpha?: number;
-}
+};
 
-export interface CssVariable {
+export type CssVariable = {
   name: string;
   value: string;
-}
+};
 
-export interface OklchGeneratorState {
+export type OklchGeneratorState = {
   colors: OklchColor[];
   cssVariables: CssVariable[];
-}
+};

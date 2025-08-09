@@ -1,10 +1,7 @@
 import type { OklchColor, CssVariable } from '../types';
+import { formatOklchValue } from '~/utils';
 
-export const formatOklchValue = (color: OklchColor): string => {
-  const { lightness, chroma, hue, alpha } = color;
-  const alphaValue = alpha !== undefined ? ` / ${alpha}` : '';
-  return `oklch(${lightness}% ${chroma} ${hue}${alphaValue})`;
-};
+export { formatOklchValue };
 
 export const generateCssVariableName = (name: string): string => {
   return `--color-${name.toLowerCase().replace(/\s+/g, '-')}`;
