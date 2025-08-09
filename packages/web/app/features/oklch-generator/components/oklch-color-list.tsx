@@ -8,7 +8,9 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
 import { Input } from '~/components/ui/input';
-import { Copy } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
+import { ColorEditDialog } from './color-edit-dialog';
+import { Copy, LayoutGrid, List } from 'lucide-react';
 import { toast } from 'sonner';
 import { getColorFormats, convertHexToOklch } from '~/utils';
 import type { OklchColor } from '../types';
@@ -21,6 +23,11 @@ type OklchColorListProps = {
   onDuplicate: (id: string) => void;
   onAdd: () => void;
   className?: string;
+};
+
+type ColorGridItemProps = {
+  color: OklchColor;
+  onClick: () => void;
 };
 
 type ColorItemProps = {
@@ -261,7 +268,57 @@ function AddColorButton({ onAdd }: { onAdd: () => void }) {
   );
 }
 
+function ColorGridItem({ color, onClick }: ColorGridItemProps) {
+  const colorValue = formatOklchValue(color);
+
+  return (
+    <div
+      className="border-border aspect-square cursor-pointer rounded-lg border transition-all hover:scale-105 hover:shadow-md"
+      style={{ backgroundColor: colorValue }}
+      onClick={onClick}
+      title={`${color.name} - Click to edit`}
+    />
+  );
+}
+
+function AddColorGridButton({ onAdd }: { onAdd: () => void }) {
+  return (
+    <button
+      onClick={onAdd}
+      className="border-border hover:border-ring hover:bg-accent/50 flex aspect-square w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed transition-colors"
+    >
+      <span className="text-muted-foreground text-2xl">+</span>
+    </button>
+  );
+}
+
 export function OklchColorList({ colors, onUpdate, onRemove, onDuplicate, onAdd, className }: OklchColorListProps) {
+  const [selectedColor, setSelectedColor] = React.useState<OklchColor | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
+  const handleColorClick = (color: OklchColor) => {
+    setSelectedColor(color);
+    setIsDialogOpen(true);
+  };
+
+  const handleColorUpdate = (updates: Partial<Omit<OklchColor, 'id'>>) => {
+    if (selectedColor) {
+      onUpdate(selectedColor.id, updates);
+    }
+  };
+
+  const handleColorRemove = () => {
+    if (selectedColor) {
+      onRemove(selectedColor.id);
+    }
+  };
+
+  const handleColorDuplicate = () => {
+    if (selectedColor) {
+      onDuplicate(selectedColor.id);
+    }
+  };
+
   return (
     <Card className={className}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
@@ -270,18 +327,49 @@ export function OklchColorList({ colors, onUpdate, onRemove, onDuplicate, onAdd,
           Add Color
         </Button>
       </CardHeader>
-      <CardContent className="space-y-3">
-        {colors.map((color) => (
-          <ColorItem
-            key={color.id}
-            color={color}
-            onUpdate={(updates) => onUpdate(color.id, updates)}
-            onRemove={() => onRemove(color.id)}
-            onDuplicate={() => onDuplicate(color.id)}
-          />
-        ))}
-        <AddColorButton onAdd={onAdd} />
+      <CardContent>
+        <Tabs defaultValue="list" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="list" className="flex items-center gap-2">
+              <List className="h-4 w-4" />
+              List
+            </TabsTrigger>
+            <TabsTrigger value="grid" className="flex items-center gap-2">
+              <LayoutGrid className="h-4 w-4" />
+              Grid
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="list" className="mt-4 space-y-3">
+            {colors.map((color) => (
+              <ColorItem
+                key={color.id}
+                color={color}
+                onUpdate={(updates) => onUpdate(color.id, updates)}
+                onRemove={() => onRemove(color.id)}
+                onDuplicate={() => onDuplicate(color.id)}
+              />
+            ))}
+            <AddColorButton onAdd={onAdd} />
+          </TabsContent>
+          <TabsContent value="grid" className="mt-4">
+            <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 lg:grid-cols-8">
+              {colors.map((color) => (
+                <ColorGridItem key={color.id} color={color} onClick={() => handleColorClick(color)} />
+              ))}
+              <AddColorGridButton onAdd={onAdd} />
+            </div>
+          </TabsContent>
+        </Tabs>
       </CardContent>
+
+      <ColorEditDialog
+        color={selectedColor}
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        onUpdate={handleColorUpdate}
+        onRemove={handleColorRemove}
+        onDuplicate={handleColorDuplicate}
+      />
     </Card>
   );
 }
