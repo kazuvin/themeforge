@@ -1,21 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { CssOutput } from '../css-output';
+import type { OklchColor } from '../../types';
 
-const sampleCssOutput = `@theme {
-  --color-primary: oklch(55% 0.224 264);
-  --color-secondary: oklch(96.1% 0.014 264);
-  --color-destructive: oklch(55% 0.206 27);
-  --color-accent-with-alpha: oklch(73.9% 0.155 53 / 0.8);
-}`;
+const sampleColors: OklchColor[] = [
+  { id: '1', name: 'primary', lightness: 55, chroma: 0.224, hue: 264 },
+  { id: '2', name: 'secondary', lightness: 96.1, chroma: 0.014, hue: 264 },
+  { id: '3', name: 'destructive', lightness: 55, chroma: 0.206, hue: 27 },
+  { id: '4', name: 'accent', lightness: 73.9, chroma: 0.155, hue: 53 },
+];
 
 const meta: Meta<typeof CssOutput> = {
   title: 'Features/OKLCH Generator/CSS Output',
   component: CssOutput,
   parameters: {
     layout: 'padded',
-  },
-  argTypes: {
-    onCopy: { action: 'copied' },
   },
 };
 
@@ -25,27 +23,18 @@ type Story = StoryObj<typeof CssOutput>;
 
 export const Default: Story = {
   args: {
-    cssOutput: sampleCssOutput,
-    onCopy: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      return true;
-    },
+    colors: sampleColors,
   },
 };
 
 export const Empty: Story = {
   args: {
-    cssOutput: '@theme {\n\n}',
-    onCopy: async () => true,
+    colors: [],
   },
 };
 
-export const CopyError: Story = {
+export const SingleColor: Story = {
   args: {
-    cssOutput: sampleCssOutput,
-    onCopy: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      return false;
-    },
+    colors: [{ id: '1', name: 'primary', lightness: 55, chroma: 0.224, hue: 264 }],
   },
 };

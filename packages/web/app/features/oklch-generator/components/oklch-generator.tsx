@@ -13,14 +13,12 @@ type OklchGeneratorProps = {
 export function OklchGenerator({ className }: OklchGeneratorProps) {
   const {
     colors,
-    cssOutput,
     addColor,
     updateColor,
     removeColor,
     clearColors,
     duplicateColor,
     importColors,
-    copyToClipboard,
   } = useOklchGenerator();
 
   const addDefaultColor = () => {
@@ -58,7 +56,7 @@ export function OklchGenerator({ className }: OklchGeneratorProps) {
         </div>
 
         <div>
-          <CssOutput cssOutput={cssOutput} onCopy={copyToClipboard} />
+          <CssOutput colors={colors} />
         </div>
       </div>
     </div>
