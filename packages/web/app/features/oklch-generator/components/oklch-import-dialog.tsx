@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog';
 import { Textarea } from '~/components/ui/textarea';
+import { useI18n } from '~/lib/i18n';
 import type { OklchColor } from '../types';
 import { parseOklchFromCss } from '../utils';
 
@@ -19,6 +20,7 @@ type OklchImportDialogProps = {
 };
 
 export function OklchImportDialog({ onImport, children }: OklchImportDialogProps) {
+  const { t } = useI18n();
   const [open, setOpen] = React.useState(false);
   const [cssText, setCssText] = React.useState('');
   const [parsedColors, setParsedColors] = React.useState<Omit<OklchColor, 'id'>[]>([]);
@@ -76,16 +78,13 @@ export function OklchImportDialog({ onImport, children }: OklchImportDialogProps
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Import OKLCH Colors from CSS</DialogTitle>
-          <DialogDescription>
-            Paste your CSS with OKLCH color variables to import them. This will replace all existing colors with the
-            imported ones.
-          </DialogDescription>
+          <DialogTitle>{t('import.title', { ns: 'oklch-generator' })}</DialogTitle>
+          <DialogDescription>{t('import.description', { ns: 'oklch-generator' })}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">CSS Code</label>
+            <label className="text-sm font-medium">{t('import.fields.cssCode', { ns: 'oklch-generator' })}</label>
             <Textarea
               placeholder={exampleCss}
               value={cssText}
@@ -102,7 +101,9 @@ export function OklchImportDialog({ onImport, children }: OklchImportDialogProps
 
           {parsedColors.length > 0 && (
             <div className="space-y-2">
-              <label className="text-sm font-medium">Preview ({parsedColors.length} colors found)</label>
+              <label className="text-sm font-medium">
+                {t('import.fields.preview', { ns: 'oklch-generator', replace: { count: parsedColors.length } })}
+              </label>
               <div className="border-border grid max-h-[200px] grid-cols-1 gap-2 overflow-y-auto rounded-md border p-3">
                 {parsedColors.map((color, index) => (
                   <div key={index} className="bg-muted/50 flex items-center gap-3 rounded p-2">
@@ -115,7 +116,7 @@ export function OklchImportDialog({ onImport, children }: OklchImportDialogProps
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium">{color.name}</p>
                       <p className="text-muted-foreground font-mono text-xs">
-                        L:{color.lightness}% C:{color.chroma} H:{color.hue}°{color.alpha && ` A:${color.alpha}`}
+                        {`L:${color.lightness}% C:${color.chroma} H:${color.hue}°${color.alpha ? ` A:${color.alpha}` : ''}`}
                       </p>
                     </div>
                   </div>
@@ -127,10 +128,10 @@ export function OklchImportDialog({ onImport, children }: OklchImportDialogProps
 
         <DialogFooter>
           <Button variant="outline" onClick={handleClose}>
-            Cancel
+            {t('import.buttons.cancel', { ns: 'oklch-generator' })}
           </Button>
           <Button onClick={handleImport} disabled={parsedColors.length === 0}>
-            Replace with {parsedColors.length} Color{parsedColors.length !== 1 ? 's' : ''}
+            {t('import.buttons.import', { ns: 'oklch-generator' })}
           </Button>
         </DialogFooter>
       </DialogContent>

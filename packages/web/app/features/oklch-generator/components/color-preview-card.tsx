@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
+import { useI18n } from '~/lib/i18n';
 import type { OklchColor } from '../types';
 
 type ColorPreviewCardProps = {
@@ -7,14 +8,18 @@ type ColorPreviewCardProps = {
 };
 
 export function ColorPreviewCard({ colors, className }: ColorPreviewCardProps) {
+  const { t } = useI18n();
+
   if (colors.length === 0) {
     return (
       <Card className={className}>
         <CardHeader>
-          <CardTitle>Color Preview</CardTitle>
+          <CardTitle>{t('colorPreview.title', { ns: 'oklch-generator' })}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-muted-foreground flex items-center justify-center py-8">Add colors to see preview</div>
+          <div className="text-muted-foreground flex items-center justify-center py-8">
+            {t('colorPreview.empty', { ns: 'oklch-generator' })}
+          </div>
         </CardContent>
       </Card>
     );
@@ -23,7 +28,7 @@ export function ColorPreviewCard({ colors, className }: ColorPreviewCardProps) {
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Color Preview</CardTitle>
+        <CardTitle>{t('colorPreview.title', { ns: 'oklch-generator' })}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
@@ -52,4 +57,3 @@ export function ColorPreviewCard({ colors, className }: ColorPreviewCardProps) {
     </Card>
   );
 }
-

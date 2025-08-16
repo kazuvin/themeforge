@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Copy, Check } from 'lucide-react';
 import { Button } from './button';
 import { cn } from '~/utils';
+import { useI18n } from '~/lib/i18n';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-javascript';
@@ -15,6 +16,7 @@ type CodeProps = {
 };
 
 export function Code({ children, language = 'css', className, showCopy = false, onCopy }: CodeProps) {
+  const { t } = useI18n();
   const [copied, setCopied] = React.useState(false);
   const [highlightedCode, setHighlightedCode] = React.useState('');
 
@@ -46,7 +48,7 @@ export function Code({ children, language = 'css', className, showCopy = false, 
       <pre className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-xs">
         {isEmpty ? (
           <div className="text-muted-foreground flex items-center justify-center py-4">
-            Add colors to see CSS output
+{t('cssOutput.empty', { ns: 'oklch-generator' })}
           </div>
         ) : (
           <code 

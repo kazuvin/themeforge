@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cn } from '~/utils';
+import { useI18n } from '~/lib/i18n';
 
 const Dialog = DialogPrimitive.Root;
 
@@ -24,6 +25,8 @@ function DialogOverlay({ ref, className, ...props }: React.ComponentProps<typeof
 }
 
 function DialogContent({ ref, className, children, ...props }: React.ComponentProps<typeof DialogPrimitive.Content>) {
+  const { t } = useI18n();
+  
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -38,7 +41,7 @@ function DialogContent({ ref, className, children, ...props }: React.ComponentPr
         {children}
         <DialogPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:pointer-events-none">
           <span className="h-4 w-4">×</span>
-          <span className="sr-only">Close</span>
+          <span className="sr-only">{t('accessibility.close', { ns: 'ui' })}</span>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPortal>

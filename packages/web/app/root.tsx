@@ -3,6 +3,7 @@ import { Toaster } from 'sonner';
 
 import type { Route } from './+types/root';
 import './app.css';
+import './lib/i18n';
 
 /* eslint react-refresh/only-export-components: 0 */
 export const links: Route.LinksFunction = () => [
