@@ -13,6 +13,7 @@ import { ColorEditDialog } from './color-edit-dialog';
 import { Copy, LayoutGrid, List } from 'lucide-react';
 import { toast } from 'sonner';
 import { getColorFormats, convertHexToOklch } from '~/utils';
+import { useI18n } from '~/lib/i18n';
 import type { OklchColor } from '../types';
 import { formatOklchValue } from '../utils';
 
@@ -38,6 +39,7 @@ type ColorItemProps = {
 };
 
 function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
+  const { t } = useI18n();
   const [isEditingName, setIsEditingName] = React.useState(false);
   const [editName, setEditName] = React.useState(color.name);
   const colorInputRef = React.useRef<HTMLInputElement>(null);
@@ -175,8 +177,15 @@ function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
           >
             {isEditingName ? '✓' : '✎'}
           </Button>
-          <Button variant="ghost" size="sm" onClick={onDuplicate} className="h-8 w-8 p-0">
-            ⧉
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onDuplicate}
+            className="h-8 w-8 p-0"
+            title={t('colorList.actions.duplicate', { ns: 'oklch-generator' })}
+          >
+            {}
+            {'⧉'}
           </Button>
           <Button
             variant="ghost"
@@ -191,7 +200,9 @@ function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <div className="space-y-1">
-          <label className="text-muted-foreground text-xs font-medium">Lightness (%)</label>
+          <label className="text-muted-foreground text-xs font-medium">
+            {t('colorEditor.fields.lightness', { ns: 'oklch-generator' })}
+          </label>
           <Input
             type="number"
             min="0"
@@ -204,7 +215,9 @@ function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
         </div>
 
         <div className="space-y-1">
-          <label className="text-muted-foreground text-xs font-medium">Chroma</label>
+          <label className="text-muted-foreground text-xs font-medium">
+            {t('colorEditor.fields.chroma', { ns: 'oklch-generator' })}
+          </label>
           <Input
             type="number"
             min="0"
@@ -217,7 +230,9 @@ function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
         </div>
 
         <div className="space-y-1">
-          <label className="text-muted-foreground text-xs font-medium">Hue (°)</label>
+          <label className="text-muted-foreground text-xs font-medium">
+            {t('colorEditor.fields.hue', { ns: 'oklch-generator' })}
+          </label>
           <Input
             type="number"
             min="0"
@@ -230,7 +245,9 @@ function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
         </div>
 
         <div className="space-y-1">
-          <label className="text-muted-foreground text-xs font-medium">Alpha</label>
+          <label className="text-muted-foreground text-xs font-medium">
+            {t('colorEditor.fields.alpha', { ns: 'oklch-generator' })}
+          </label>
           <Input
             type="number"
             min="0"
@@ -250,6 +267,7 @@ function ColorItem({ color, onUpdate, onRemove, onDuplicate }: ColorItemProps) {
 }
 
 function AddColorButton({ onAdd }: { onAdd: () => void }) {
+  const { t } = useI18n();
   return (
     <button
       onClick={onAdd}
@@ -260,8 +278,12 @@ function AddColorButton({ onAdd }: { onAdd: () => void }) {
           <span className="text-muted-foreground text-2xl">+</span>
         </div>
         <div className="flex-1 text-left">
-          <h4 className="text-muted-foreground text-sm font-medium">Add New Color</h4>
-          <p className="text-muted-foreground text-xs">Click to add a new OKLCH color</p>
+          <h4 className="text-muted-foreground text-sm font-medium">
+            {t('colorList.addNew.title', { ns: 'oklch-generator' })}
+          </h4>
+          <p className="text-muted-foreground text-xs">
+            {t('colorList.addNew.description', { ns: 'oklch-generator' })}
+          </p>
         </div>
       </div>
     </button>
@@ -293,6 +315,7 @@ function AddColorGridButton({ onAdd }: { onAdd: () => void }) {
 }
 
 export function OklchColorList({ colors, onUpdate, onRemove, onDuplicate, onAdd, className }: OklchColorListProps) {
+  const { t } = useI18n();
   const [selectedColor, setSelectedColor] = React.useState<OklchColor | null>(null);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
@@ -322,9 +345,9 @@ export function OklchColorList({ colors, onUpdate, onRemove, onDuplicate, onAdd,
   return (
     <Card className={className}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
-        <CardTitle>Colors ({colors.length})</CardTitle>
+        <CardTitle>{t('colorList.title', { ns: 'oklch-generator', replace: { count: colors.length } })}</CardTitle>
         <Button variant="outline" size="sm" onClick={onAdd}>
-          Add Color
+          {t('colorList.addColor', { ns: 'oklch-generator' })}
         </Button>
       </CardHeader>
       <CardContent>
@@ -332,11 +355,11 @@ export function OklchColorList({ colors, onUpdate, onRemove, onDuplicate, onAdd,
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="list" className="flex items-center gap-2">
               <List className="h-4 w-4" />
-              List
+              {t('colorList.viewModes.list', { ns: 'oklch-generator' })}
             </TabsTrigger>
             <TabsTrigger value="grid" className="flex items-center gap-2">
               <LayoutGrid className="h-4 w-4" />
-              Grid
+              {t('colorList.viewModes.grid', { ns: 'oklch-generator' })}
             </TabsTrigger>
           </TabsList>
           <TabsContent value="list" className="mt-4 space-y-3">

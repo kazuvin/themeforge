@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '~/components/ui/tabs';
 import { Code } from '~/components/ui/code';
 import { toast } from 'sonner';
+import { useI18n } from '~/lib/i18n';
 import type { OklchColor } from '../types';
 
 type OutputFormat = 'css-variables' | 'tailwind-v3' | 'tailwind-v4';
@@ -13,6 +14,7 @@ type CssOutputProps = {
 };
 
 export function CssOutput({ colors, className }: CssOutputProps) {
+  const { t } = useI18n();
   const [activeTab, setActiveTab] = React.useState<OutputFormat>('css-variables');
 
   const generateCssVariables = (colors: OklchColor[]) => {
@@ -81,14 +83,16 @@ ${colorEntries}
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>CSS Output</CardTitle>
+        <CardTitle>{t('cssOutput.title', { ns: 'oklch-generator' })}</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as OutputFormat)}>
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="css-variables">CSS Variables</TabsTrigger>
-            <TabsTrigger value="tailwind-v3">Tailwind v3</TabsTrigger>
-            <TabsTrigger value="tailwind-v4">Tailwind v4</TabsTrigger>
+            <TabsTrigger value="css-variables">
+              {t('cssOutput.tabs.cssVariables', { ns: 'oklch-generator' })}
+            </TabsTrigger>
+            <TabsTrigger value="tailwind-v3">{t('cssOutput.tabs.tailwindV3', { ns: 'oklch-generator' })}</TabsTrigger>
+            <TabsTrigger value="tailwind-v4">{t('cssOutput.tabs.tailwindV4', { ns: 'oklch-generator' })}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="css-variables" className="mt-4">

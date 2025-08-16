@@ -11,6 +11,7 @@ import { Input } from '~/components/ui/input';
 import { Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { getColorFormats, convertHexToOklch } from '~/utils';
+import { useI18n } from '~/lib/i18n';
 import type { OklchColor } from '../types';
 import { formatOklchValue } from '../utils';
 
@@ -24,6 +25,7 @@ type ColorEditDialogProps = {
 };
 
 export function ColorEditDialog({ color, open, onOpenChange, onUpdate, onRemove, onDuplicate }: ColorEditDialogProps) {
+  const { t } = useI18n();
   const [editName, setEditName] = React.useState('');
   const [editLightness, setEditLightness] = React.useState(0);
   const [editChroma, setEditChroma] = React.useState(0);
@@ -108,7 +110,7 @@ export function ColorEditDialog({ color, open, onOpenChange, onUpdate, onRemove,
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit Color</DialogTitle>
+          <DialogTitle>{t('colorEditor.title', { ns: 'oklch-generator' })}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -157,7 +159,7 @@ export function ColorEditDialog({ color, open, onOpenChange, onUpdate, onRemove,
 
           {/* Name Input */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Name</label>
+            <label className="text-sm font-medium">{t('colorEditor.fields.name', { ns: 'oklch-generator' })}</label>
             <Input
               type="text"
               value={editName}
@@ -169,7 +171,9 @@ export function ColorEditDialog({ color, open, onOpenChange, onUpdate, onRemove,
           {/* OKLCH Values */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Lightness (%)</label>
+              <label className="text-sm font-medium">
+                {t('colorEditor.fields.lightness', { ns: 'oklch-generator' })}
+              </label>
               <Input
                 type="number"
                 min="0"
@@ -181,7 +185,7 @@ export function ColorEditDialog({ color, open, onOpenChange, onUpdate, onRemove,
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Chroma</label>
+              <label className="text-sm font-medium">{t('colorEditor.fields.chroma', { ns: 'oklch-generator' })}</label>
               <Input
                 type="number"
                 min="0"
@@ -193,7 +197,7 @@ export function ColorEditDialog({ color, open, onOpenChange, onUpdate, onRemove,
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Hue (°)</label>
+              <label className="text-sm font-medium">{t('colorEditor.fields.hue', { ns: 'oklch-generator' })}</label>
               <Input
                 type="number"
                 min="0"
@@ -205,7 +209,7 @@ export function ColorEditDialog({ color, open, onOpenChange, onUpdate, onRemove,
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Alpha</label>
+              <label className="text-sm font-medium">{t('colorEditor.fields.alpha', { ns: 'oklch-generator' })}</label>
               <Input
                 type="number"
                 min="0"
@@ -221,21 +225,20 @@ export function ColorEditDialog({ color, open, onOpenChange, onUpdate, onRemove,
         <DialogFooter className="gap-2">
           <div className="flex gap-2">
             <Button variant="outline" onClick={handleDuplicate}>
-              Duplicate
+              {t('colorEditor.actions.duplicate', { ns: 'oklch-generator' })}
             </Button>
             <Button variant="outline" onClick={handleRemove} className="text-destructive hover:text-destructive">
-              Remove
+              {t('colorEditor.actions.remove', { ns: 'oklch-generator' })}
             </Button>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              {t('buttons.cancel')}
             </Button>
-            <Button onClick={handleSave}>Save</Button>
+            <Button onClick={handleSave}>{t('buttons.save')}</Button>
           </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
-
